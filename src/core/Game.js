@@ -157,6 +157,10 @@ if (typeof QuestUI !== "undefined") {
   QuestUI.init();
 }
 
+if (typeof CollectionUI !== "undefined") {
+  CollectionUI.init();
+}
+
 this._setupEventSubscriptions();
 
 EnemyManager.init(
