@@ -13,37 +13,136 @@ on:
 
 jobs:
   validate:
-    name: Validate Game
+    name: Extract and Validate Game
     runs-on: ubuntu-latest
 
     steps:
+      # --------------------------------------------------
+      # 1. Download repository
+      # --------------------------------------------------
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm
-
-      - name: Verify repository structure
+      # --------------------------------------------------
+      # 2. Find and extract the game ZIP
+      # --------------------------------------------------
+      - name: Extract game archive
         shell: bash
         run: |
           set -e
 
-          test -f package.json
-          test -f package-lock.json
-          test -f index.html
+          echo "Searching for game ZIP archive..."
 
-          test -d src
-          test -d tests
+          ZIP_FILE=$(find . -type f -iname '*.zip' \
+            -not -path './.git/*' \
+            | head -n 1)
 
-          echo "Repository structure: PASS"
+          if [ -z "$ZIP_FILE" ]; then
+            echo "ERROR: No ZIP archive was found."
+            echo "Upload the Infinity Depths ZIP file to the repository."
+            exit 1
+          fi
 
-      - name: Install dependencies
-        run: npm ci
+          echo "Found archive:"
+          echo "$ZIP_FILE"
 
+          rm -rf extracted_game
+          mkdir -p extracted_game
+
+          unzip -q "$ZIP_FILE" -d extracted_game
+
+          echo "Archive extracted successfully."
+
+          echo "Extracted files:"
+          find extracted_game -maxdepth 3 -type f | head -100
+
+      # --------------------------------------------------
+      # 3. Locate actual game root
+      # --------------------------------------------------
+      - name: Locate game root
+        shell: bash
+        run: |
+          set -e
+
+          GAME_ROOT=$(find "$GITHUB_WORKSPACE/extracted_game" \
+            -type f \
+            -name 'package.json' \
+            -print \
+            | head -n 1 \
+            | xargs -r dirname)
+
+          if [ -z "$GAME_ROOT" ]; then
+            echo "ERROR: package.json was not found after extraction."
+            exit 1
+          fi
+
+          echo "Game root:"
+          echo "$GAME_ROOT"
+
+          if [ ! -f "$GAME_ROOT/index.html" ]; then
+            echo "ERROR: index.html was not found in game root."
+            exit 1
+          fi
+
+          if [ ! -d "$GAME_ROOT/src" ]; then
+            echo "ERROR: src directory was not found."
+            exit 1
+          fi
+
+          if [ ! -d "$GAME_ROOT/tests" ]; then
+            echo "ERROR: tests directory was not found."
+            exit 1
+          fi
+
+          echo "GAME_ROOT=$GAME_ROOT" >> "$GITHUB_ENV"
+
+      # --------------------------------------------------
+      # 4. Verify lock file BEFORE enabling npm cache
+      # --------------------------------------------------
+      - name: Verify dependency lock file
+        shell: bash
+        run: |
+          set -e
+
+          if [ -f "$GAME_ROOT/package-lock.json" ]; then
+            echo "package-lock.json found."
+          elif [ -f "$GAME_ROOT/npm-shrinkwrap.json" ]; then
+            echo "npm-shrinkwrap.json found."
+          elif [ -f "$GAME_ROOT/yarn.lock" ]; then
+            echo "yarn.lock found."
+          else
+            echo "ERROR: No dependency lock file found."
+            echo "Expected package-lock.json, npm-shrinkwrap.json, or yarn.lock."
+            exit 1
+          fi
+
+      # --------------------------------------------------
+      # 5. Setup current Node.js
+      # --------------------------------------------------
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: ${{ env.GAME_ROOT }}/package-lock.json
+
+      # --------------------------------------------------
+      # 6. Display environment
+      # --------------------------------------------------
+      - name: Environment information
+        shell: bash
+        run: |
+          node --version
+          npm --version
+
+          echo "Game root:"
+          echo "$GAME_ROOT"
+
+      # --------------------------------------------------
+      # 7. Validate package versions
+      # --------------------------------------------------
       - name: Validate package versions
+        working-directory: ${{ env.GAME_ROOT }}
         shell: bash
         run: |
           set -e
@@ -51,12 +150,28 @@ jobs:
           PACKAGE_VERSION=$(node -p "require('./package.json').version")
           LOCK_VERSION=$(node -p "require('./package-lock.json').version")
 
-          echo "package.json: $PACKAGE_VERSION"
-          echo "package-lock.json: $LOCK_VERSION"
+          echo "package.json version: $PACKAGE_VERSION"
+          echo "package-lock.json version: $LOCK_VERSION"
 
-          test "$PACKAGE_VERSION" = "$LOCK_VERSION"
+          if [ "$PACKAGE_VERSION" != "$LOCK_VERSION" ]; then
+            echo "ERROR: package.json and package-lock.json versions do not match."
+            exit 1
+          fi
 
+          echo "Package version validation: PASS"
+
+      # --------------------------------------------------
+      # 8. Install dependencies
+      # --------------------------------------------------
+      - name: Install dependencies
+        working-directory: ${{ env.GAME_ROOT }}
+        run: npm ci
+
+      # --------------------------------------------------
+      # 9. JavaScript syntax validation
+      # --------------------------------------------------
       - name: JavaScript syntax check
+        working-directory: ${{ env.GAME_ROOT }}
         shell: bash
         run: |
           set -e
@@ -67,17 +182,39 @@ jobs:
             echo "Checking: $file"
             node --check "$file"
             count=$((count + 1))
-          done < <(find src tests -type f -name '*.js' -print0)
+          done < <(
+            find src tests \
+              -type f \
+              -name '*.js' \
+              -print0
+          )
 
           echo "JavaScript files checked: $count"
 
+          if [ "$count" -eq 0 ]; then
+            echo "ERROR: No JavaScript files found."
+            exit 1
+          fi
+
+      # --------------------------------------------------
+      # 10. Full regression tests
+      # --------------------------------------------------
       - name: Run full regression tests
+        working-directory: ${{ env.GAME_ROOT }}
         run: npm test
 
+      # --------------------------------------------------
+      # 11. Phase 13 tests
+      # --------------------------------------------------
       - name: Run Phase 13 tests
+        working-directory: ${{ env.GAME_ROOT }}
         run: npm run test:phase13
 
+      # --------------------------------------------------
+      # 12. Validate index.html
+      # --------------------------------------------------
       - name: Validate index.html script references
+        working-directory: ${{ env.GAME_ROOT }}
         shell: bash
         run: |
           set -e
@@ -88,9 +225,11 @@ jobs:
 
           const html = fs.readFileSync('index.html', 'utf8');
 
-          const refs = [...html.matchAll(
-            /<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi
-          )].map(match => match[1]);
+          const refs = [
+            ...html.matchAll(
+              /<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi
+            )
+          ].map(match => match[1]);
 
           const localRefs = refs.filter(src =>
             !/^(https?:)?\/\//i.test(src) &&
@@ -100,13 +239,16 @@ jobs:
           const duplicates = [
             ...new Set(
               localRefs.filter(
-                (src, index) => localRefs.indexOf(src) !== index
+                (src, index) =>
+                  localRefs.indexOf(src) !== index
               )
             )
           ];
 
-          if (duplicates.length) {
-            console.error('Duplicate local script references:');
+          if (duplicates.length > 0) {
+            console.error(
+              'Duplicate local script references:'
+            );
             console.error(duplicates);
             process.exit(1);
           }
@@ -114,8 +256,12 @@ jobs:
           const missing = [];
 
           for (const src of localRefs) {
-            const cleanSrc = src.split('?')[0].split('#')[0];
+            const cleanSrc = src
+              .split('?')[0]
+              .split('#')[0];
+
             const normalized = cleanSrc.replace(/^\/+/, '');
+
             const filePath = path.resolve(normalized);
 
             if (!fs.existsSync(filePath)) {
@@ -123,41 +269,70 @@ jobs:
             }
           }
 
-          if (missing.length) {
-            console.error('Missing local script references:');
+          if (missing.length > 0) {
+            console.error(
+              'Missing local script references:'
+            );
             console.error(missing);
             process.exit(1);
           }
 
-          console.log(`Total script references: ${refs.length}`);
-          console.log(`Local script references: ${localRefs.length}`);
+          console.log(
+            `Total script references: ${refs.length}`
+          );
+
+          console.log(
+            `Local script references: ${localRefs.length}`
+          );
+
           console.log('Missing local scripts: 0');
           console.log('Duplicate local scripts: 0');
-          console.log('index.html validation: PASS');
+          console.log(
+            'index.html validation: PASS'
+          );
           NODE
 
-      - name: Verify required Phase 13 files
+      # --------------------------------------------------
+      # 13. Verify Phase 13 structure
+      # --------------------------------------------------
+      - name: Verify Phase 13 files
+        working-directory: ${{ env.GAME_ROOT }}
         shell: bash
         run: |
           set -e
 
-          test -f src/world/WorldSystem.js
-          test -f src/world/AdvancedWorldEvents.js
-          test -f src/world/MapRules.js
-          test -f src/npc/NPCSystem.js
-          test -f src/story/StorySystem.js
+          REQUIRED_FILES=(
+            "src/world/WorldSystem.js"
+            "src/world/AdvancedWorldEvents.js"
+            "src/world/MapRules.js"
+            "src/npc/NPCSystem.js"
+            "src/story/StorySystem.js"
+            "tests/phase13-advanced-world.test.js"
+          )
 
-          test -f tests/phase13-advanced-world.test.js
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Missing required file: $file"
+              exit 1
+            fi
 
-          echo "Phase 13 required files: PASS"
+            echo "Found: $file"
+          done
 
-      - name: Check repository for obvious broken merge markers
+          echo "Phase 13 structure: PASS"
+
+      # --------------------------------------------------
+      # 14. Search for broken merge markers
+      # --------------------------------------------------
+      - name: Check merge conflict markers
+        working-directory: ${{ env.GAME_ROOT }}
         shell: bash
         run: |
           set -e
 
           if grep -RIn \
             --exclude-dir=.git \
+            --exclude-dir=node_modules \
             --exclude='*.zip' \
             --exclude='*.png' \
             --exclude='*.jpg' \
@@ -165,13 +340,17 @@ jobs:
             --exclude='*.webp' \
             -E '^(<<<<<<<|=======|>>>>>>>)' \
             .; then
-            echo "Broken merge markers detected."
+
+            echo "ERROR: Broken merge conflict markers detected."
             exit 1
           fi
 
           echo "Merge marker check: PASS"
 
-      - name: Validate ZIP archives if present
+      # --------------------------------------------------
+      # 15. Validate ZIP archives
+      # --------------------------------------------------
+      - name: Validate ZIP archives
         shell: bash
         run: |
           set -e
@@ -180,25 +359,50 @@ jobs:
 
           while IFS= read -r -d '' archive; do
             found=1
-            echo "Testing ZIP: $archive"
+
+            echo "Testing ZIP:"
+            echo "$archive"
+
             unzip -t "$archive"
-          done < <(find . -type f -name '*.zip' -print0)
+          done < <(
+            find . \
+              -type f \
+              -name '*.zip' \
+              -not -path './.git/*' \
+              -print0
+          )
 
           if [ "$found" -eq 0 ]; then
-            echo "No ZIP archives found. Skipping ZIP validation."
+            echo "No ZIP archives found."
           else
-            echo "ZIP validation: PASS"
+            echo "ZIP integrity: PASS"
           fi
 
+      # --------------------------------------------------
+      # 16. Final summary
+      # --------------------------------------------------
       - name: Final validation summary
         shell: bash
         run: |
-          echo "========================================"
-          echo " Infinity Depths validation completed"
-          echo "========================================"
+          echo ""
+          echo "=============================================="
+          echo "       INFINITY DEPTHS VALIDATION"
+          echo "=============================================="
+          echo ""
+          echo "Game root:"
+          echo "$GAME_ROOT"
+          echo ""
+          echo "Node:"
+          node --version
+          echo ""
           echo "Phase 13: PASS"
-          echo "Regression: PASS"
+          echo "Regression tests: PASS"
           echo "JavaScript syntax: PASS"
-          echo "index.html references: PASS"
           echo "Package versions: PASS"
-          echo "========================================"
+          echo "index.html: PASS"
+          echo "Phase 13 structure: PASS"
+          echo "ZIP integrity: PASS"
+          echo ""
+          echo "=============================================="
+          echo "             VALIDATION COMPLETE"
+          echo "=============================================="
