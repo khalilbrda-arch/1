@@ -1,0 +1,204 @@
+name: Validate Infinity Depths
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate Game
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Verify repository structure
+        shell: bash
+        run: |
+          set -e
+
+          test -f package.json
+          test -f package-lock.json
+          test -f index.html
+
+          test -d src
+          test -d tests
+
+          echo "Repository structure: PASS"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate package versions
+        shell: bash
+        run: |
+          set -e
+
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          LOCK_VERSION=$(node -p "require('./package-lock.json').version")
+
+          echo "package.json: $PACKAGE_VERSION"
+          echo "package-lock.json: $LOCK_VERSION"
+
+          test "$PACKAGE_VERSION" = "$LOCK_VERSION"
+
+      - name: JavaScript syntax check
+        shell: bash
+        run: |
+          set -e
+
+          count=0
+
+          while IFS= read -r -d '' file; do
+            echo "Checking: $file"
+            node --check "$file"
+            count=$((count + 1))
+          done < <(find src tests -type f -name '*.js' -print0)
+
+          echo "JavaScript files checked: $count"
+
+      - name: Run full regression tests
+        run: npm test
+
+      - name: Run Phase 13 tests
+        run: npm run test:phase13
+
+      - name: Validate index.html script references
+        shell: bash
+        run: |
+          set -e
+
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const html = fs.readFileSync('index.html', 'utf8');
+
+          const refs = [...html.matchAll(
+            /<script\b[^>]*\bsrc=["']([^"']+)["'][^>]*>/gi
+          )].map(match => match[1]);
+
+          const localRefs = refs.filter(src =>
+            !/^(https?:)?\/\//i.test(src) &&
+            !/^data:/i.test(src)
+          );
+
+          const duplicates = [
+            ...new Set(
+              localRefs.filter(
+                (src, index) => localRefs.indexOf(src) !== index
+              )
+            )
+          ];
+
+          if (duplicates.length) {
+            console.error('Duplicate local script references:');
+            console.error(duplicates);
+            process.exit(1);
+          }
+
+          const missing = [];
+
+          for (const src of localRefs) {
+            const cleanSrc = src.split('?')[0].split('#')[0];
+            const normalized = cleanSrc.replace(/^\/+/, '');
+            const filePath = path.resolve(normalized);
+
+            if (!fs.existsSync(filePath)) {
+              missing.push(src);
+            }
+          }
+
+          if (missing.length) {
+            console.error('Missing local script references:');
+            console.error(missing);
+            process.exit(1);
+          }
+
+          console.log(`Total script references: ${refs.length}`);
+          console.log(`Local script references: ${localRefs.length}`);
+          console.log('Missing local scripts: 0');
+          console.log('Duplicate local scripts: 0');
+          console.log('index.html validation: PASS');
+          NODE
+
+      - name: Verify required Phase 13 files
+        shell: bash
+        run: |
+          set -e
+
+          test -f src/world/WorldSystem.js
+          test -f src/world/AdvancedWorldEvents.js
+          test -f src/world/MapRules.js
+          test -f src/npc/NPCSystem.js
+          test -f src/story/StorySystem.js
+
+          test -f tests/phase13-advanced-world.test.js
+
+          echo "Phase 13 required files: PASS"
+
+      - name: Check repository for obvious broken merge markers
+        shell: bash
+        run: |
+          set -e
+
+          if grep -RIn \
+            --exclude-dir=.git \
+            --exclude='*.zip' \
+            --exclude='*.png' \
+            --exclude='*.jpg' \
+            --exclude='*.jpeg' \
+            --exclude='*.webp' \
+            -E '^(<<<<<<<|=======|>>>>>>>)' \
+            .; then
+            echo "Broken merge markers detected."
+            exit 1
+          fi
+
+          echo "Merge marker check: PASS"
+
+      - name: Validate ZIP archives if present
+        shell: bash
+        run: |
+          set -e
+
+          found=0
+
+          while IFS= read -r -d '' archive; do
+            found=1
+            echo "Testing ZIP: $archive"
+            unzip -t "$archive"
+          done < <(find . -type f -name '*.zip' -print0)
+
+          if [ "$found" -eq 0 ]; then
+            echo "No ZIP archives found. Skipping ZIP validation."
+          else
+            echo "ZIP validation: PASS"
+          fi
+
+      - name: Final validation summary
+        shell: bash
+        run: |
+          echo "========================================"
+          echo " Infinity Depths validation completed"
+          echo "========================================"
+          echo "Phase 13: PASS"
+          echo "Regression: PASS"
+          echo "JavaScript syntax: PASS"
+          echo "index.html references: PASS"
+          echo "Package versions: PASS"
+          echo "========================================"
