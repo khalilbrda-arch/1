@@ -1,0 +1,72 @@
+name: Unzip Project
+
+# يعمل تلقائياً كلما رفعت/عدّلت أي ملف .zip في جذر الريبو،
+# أو يدوياً من تبويب Actions > Run workflow.
+on:
+  push:
+    paths:
+      - "*.zip"
+  workflow_dispatch:
+    inputs:
+      zip_name:
+        description: "اسم ملف الـ zip الموجود في جذر الريبو"
+        required: true
+        default: "Infinity_depths-main-updated.zip"
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: تحديد اسم ملف الـ zip
+        id: vars
+        run: |
+          if [ -n "${{ github.event.inputs.zip_name }}" ]; then
+            echo "zip=${{ github.event.inputs.zip_name }}" >> "$GITHUB_OUTPUT"
+          else
+            # أول ملف zip موجود في الجذر عند التشغيل التلقائي بالـ push
+            first_zip=$(ls *.zip | head -n 1)
+            echo "zip=$first_zip" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: فك الضغط
+        run: |
+          ZIP_FILE="${{ steps.vars.outputs.zip }}"
+          echo "فك ضغط: $ZIP_FILE"
+
+          rm -rf _extracted
+          mkdir _extracted
+          unzip -o "$ZIP_FILE" -d _extracted
+
+          # لو الملف المضغوط يحتوي مجلداً واحداً فقط في القمة
+          # (مثل Infinity_depths-main/) نرفع محتواه لجذر الريبو
+          # مباشرة بدل إنشاء مجلد متداخل غير مرغوب.
+          top_items=$(ls _extracted | wc -l)
+          if [ "$top_items" -eq 1 ] && [ -d "_extracted/$(ls _extracted)" ]; then
+            SRC="_extracted/$(ls _extracted)"
+          else
+            SRC="_extracted"
+          fi
+
+          # نستثني .github/workflows عمداً: GitHub يمنع GITHUB_TOKEN
+          # الافتراضي من إنشاء/تعديل ملفات workflow عبر git push (قيد
+          # أمني من GitHub نفسه، لا علاقة له بصلاحيات الريبو). أي ملف
+          # workflow جديد يجب إضافته يدوياً عبر واجهة GitHub.
+          rm -rf "$SRC/.github/workflows"
+
+          cp -rf "$SRC"/. .
+
+          rm -rf _extracted
+
+      - name: Commit ورفع التغييرات
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Auto-unzip: ${{ steps.vars.outputs.zip }}" || echo "لا توجد تغييرات لعملها commit"
+          git push
