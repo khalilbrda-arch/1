@@ -1,0 +1,74 @@
+
+> infinity-depths@0.13.0 test:phase13
+> node --test tests/phase13-advanced-world.test.js
+
+TAP version 13
+# Subtest: Phase 13: advanced-world configuration is centralized and validated
+ok 1 - Phase 13: advanced-world configuration is centralized and validated
+  ---
+  duration_ms: 16.566042
+  type: 'test'
+  ...
+# Subtest: Phase 13: NPC interaction is owned by AdvancedWorldSystem and persists visit counts
+ok 2 - Phase 13: NPC interaction is owned by AdvancedWorldSystem and persists visit counts
+  ---
+  duration_ms: 5.45213
+  type: 'test'
+  ...
+# Subtest: Phase 13: story chapters advance from events without UI coupling
+ok 3 - Phase 13: story chapters advance from events without UI coupling
+  ---
+  duration_ms: 6.08343
+  type: 'test'
+  ...
+# Subtest: Phase 13: tidal surge activates and ending it clears the special map rule
+ok 4 - Phase 13: tidal surge activates and ending it clears the special map rule
+  ---
+  duration_ms: 3.700363
+  type: 'test'
+  ...
+# Subtest: Phase 13: dynamic world events are deterministic and counted once per start
+ok 5 - Phase 13: dynamic world events are deterministic and counted once per start
+  ---
+  duration_ms: 3.302453
+  type: 'test'
+  ...
+# Subtest: Phase 13: advanced-world save data round-trips and malformed data is rejected
+ok 6 - Phase 13: advanced-world save data round-trips and malformed data is rejected
+  ---
+  duration_ms: 6.376616
+  type: 'test'
+  ...
+# Subtest: Phase 13: NPC meshes are routed through the existing interaction boundary
+ok 7 - Phase 13: NPC meshes are routed through the existing interaction boundary
+  ---
+  duration_ms: 0.54182
+  type: 'test'
+  ...
+# Subtest: Phase 13: build validation includes advanced map rules
+ok 8 - Phase 13: build validation includes advanced map rules
+  ---
+  duration_ms: 0.296525
+  type: 'test'
+  ...
+# Subtest: Phase 13 regression: advanced-world state has safe defaults for old saves
+ok 9 - Phase 13 regression: advanced-world state has safe defaults for old saves
+  ---
+  duration_ms: 5.090226
+  type: 'test'
+  ...
+# Subtest: Phase 13 regression: package and runtime versions match
+ok 10 - Phase 13 regression: package and runtime versions match
+  ---
+  duration_ms: 3.682519
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 291.884509

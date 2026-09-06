@@ -1,0 +1,20 @@
+{
+  "name": "infinity-depths",
+  "version": "0.13.0",
+  "private": true,
+  "description": "Infinity Depths browser game",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "test:phase6": "node --test tests/phase6-economy.test.js",
+    "test:phase7": "node --test tests/phase7-progression.test.js",
+    "test:phase8": "node --test tests/phase8-merge.test.js",
+    "test:phase9": "node --test tests/phase9-collection.test.js",
+    "test:phase10": "node --test tests/phase10-bosses.test.js",
+    "test:phase11": "node --test tests/phase11-world.test.js",
+    "test:phase12": "node --test tests/phase12-quests.test.js",
+    "test:phase13": "node --test tests/phase13-advanced-world.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
