@@ -1,0 +1,443 @@
+name: Infinity Depths - Validate & Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  validate-and-deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+
+      # =========================================================
+      # 1. Checkout repository
+      # =========================================================
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      # =========================================================
+      # 2. Locate latest game ZIP
+      # =========================================================
+      - name: Locate game ZIP
+        id: locate_zip
+        shell: bash
+        run: |
+          set -e
+
+          ZIP_FILE=""
+
+          if [ -f "Infinity_depths-phase13-final.zip" ]; then
+            ZIP_FILE="Infinity_depths-phase13-final.zip"
+          else
+            ZIP_FILE="$(find . -type f -name '*.zip' -print | sort | tail -n 1)"
+          fi
+
+          if [ -z "$ZIP_FILE" ]; then
+            echo "ERROR: No ZIP file found."
+            exit 1
+          fi
+
+          echo "Using game archive:"
+          echo "$ZIP_FILE"
+
+          echo "zip_file=$ZIP_FILE" >> "$GITHUB_OUTPUT"
+
+      # =========================================================
+      # 3. Verify ZIP
+      # =========================================================
+      - name: Verify ZIP integrity
+        shell: bash
+        run: |
+          set -e
+
+          ZIP_FILE="${{ steps.locate_zip.outputs.zip_file }}"
+
+          echo "Testing ZIP:"
+          echo "$ZIP_FILE"
+
+          unzip -t "$ZIP_FILE"
+
+          echo "ZIP integrity: OK"
+
+      # =========================================================
+      # 4. Extract game
+      # =========================================================
+      - name: Extract game
+        shell: bash
+        run: |
+          set -e
+
+          rm -rf extracted_game
+          mkdir -p extracted_game
+
+          unzip -q "${{ steps.locate_zip.outputs.zip_file }}" \
+            -d extracted_game
+
+          echo "Extraction complete."
+
+          find extracted_game \
+            -maxdepth 3 \
+            -type f \
+            | sort \
+            | head -250
+
+      # =========================================================
+      # 5. Locate index.html
+      # =========================================================
+      - name: Locate game root
+        id: locate_game
+        shell: bash
+        run: |
+          set -e
+
+          INDEX_FILE="$(find extracted_game \
+            -type f \
+            -name 'index.html' \
+            -print \
+            | head -n 1)"
+
+          if [ -z "$INDEX_FILE" ]; then
+            echo "ERROR: index.html was not found."
+            exit 1
+          fi
+
+          GAME_ROOT="$(dirname "$INDEX_FILE")"
+
+          echo "index.html:"
+          echo "$INDEX_FILE"
+
+          echo ""
+          echo "Game root:"
+          echo "$GAME_ROOT"
+
+          echo "game_root=$GAME_ROOT" >> "$GITHUB_OUTPUT"
+
+      # =========================================================
+      # 6. Verify actual project structure
+      # =========================================================
+      - name: Verify project structure
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        shell: bash
+        run: |
+          set -e
+
+          required_files=(
+            "index.html"
+            "package.json"
+            "package-lock.json"
+
+            "src/core/Config.js"
+            "src/core/DataContracts.js"
+            "src/core/EventBus.js"
+            "src/core/Game.js"
+            "src/core/GameState.js"
+
+            "src/save/SaveManager.js"
+
+            "src/world/WorldSystem.js"
+            "src/world/AdvancedWorldSystem.js"
+            "src/world/DefenseMap.js"
+
+            "src/interaction/InteractionController.js"
+
+            "src/economy/EconomySystem.js"
+            "src/progression/ProgressionSystem.js"
+            "src/quests/QuestSystem.js"
+
+            "tests/phase13-advanced-world.test.js"
+          )
+
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Missing required file: $file"
+              exit 1
+            fi
+
+            echo "Found: $file"
+          done
+
+          echo ""
+          echo "Project structure: OK"
+
+      # =========================================================
+      # 7. Verify Phase 13
+      # =========================================================
+      - name: Verify Phase 13 implementation
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        shell: bash
+        run: |
+          set -e
+
+          phase13_files=(
+            "src/world/WorldSystem.js"
+            "src/world/AdvancedWorldSystem.js"
+            "src/world/DefenseMap.js"
+            "src/interaction/InteractionController.js"
+            "src/save/SaveManager.js"
+            "src/core/GameState.js"
+            "src/core/Config.js"
+            "tests/phase13-advanced-world.test.js"
+          )
+
+          for file in "${phase13_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Missing Phase 13 file: $file"
+              exit 1
+            fi
+
+            echo "Phase 13 OK: $file"
+          done
+
+          echo ""
+          echo "Phase 13 structure: OK"
+
+      # =========================================================
+      # 8. Setup Node.js
+      # =========================================================
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      # =========================================================
+      # 9. Validate package version
+      # =========================================================
+      - name: Validate package version
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        shell: bash
+        run: |
+          set -e
+
+          VERSION="$(node -p "require('./package.json').version")"
+
+          echo "Detected version: $VERSION"
+
+          if [ "$VERSION" != "0.13.0" ]; then
+            echo "ERROR: Expected version 0.13.0"
+            exit 1
+          fi
+
+          echo "Package version: OK"
+
+      # =========================================================
+      # 10. Install dependencies
+      # =========================================================
+      - name: Install dependencies
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        run: npm ci
+
+      # =========================================================
+      # 11. JavaScript syntax check
+      # =========================================================
+      - name: JavaScript syntax check
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        shell: bash
+        run: |
+          set -e
+
+          FAILED=0
+
+          while IFS= read -r file; do
+            echo "Checking: $file"
+
+            if ! node --check "$file"; then
+              echo "ERROR: Syntax error in $file"
+              FAILED=1
+            fi
+          done < <(
+            find src tests \
+              -type f \
+              -name '*.js' \
+              -not -path './node_modules/*' \
+              | sort
+          )
+
+          if [ "$FAILED" -ne 0 ]; then
+            echo ""
+            echo "JavaScript syntax check FAILED."
+            exit 1
+          fi
+
+          echo ""
+          echo "JavaScript syntax: OK"
+
+      # =========================================================
+      # 12. Full regression tests
+      # =========================================================
+      - name: Run full regression tests
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        run: npm test
+
+      # =========================================================
+      # 13. Phase 13 dedicated tests
+      # =========================================================
+      - name: Run Phase 13 tests
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        run: npm run test:phase13
+
+      # =========================================================
+      # 14. Validate index.html
+      # =========================================================
+      - name: Validate index.html script references
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        shell: bash
+        run: |
+          set -e
+
+          node <<'NODE'
+          const fs = require('fs');
+          const path = require('path');
+
+          const html = fs.readFileSync('index.html', 'utf8');
+
+          const matches = [
+            ...html.matchAll(
+              /<script[^>]+src=["']([^"']+)["']/gi
+            )
+          ];
+
+          const refs = matches.map(match => match[1]);
+
+          const localRefs = refs.filter(src =>
+            !/^https?:\/\//i.test(src) &&
+            !/^\/\//.test(src)
+          );
+
+          const uniqueRefs = new Set(localRefs);
+
+          console.log(`Total script refs: ${refs.length}`);
+          console.log(`Local script refs: ${localRefs.length}`);
+          console.log(`Unique local refs: ${uniqueRefs.size}`);
+
+          if (localRefs.length !== uniqueRefs.size) {
+            throw new Error(
+              'Duplicate local script references detected.'
+            );
+          }
+
+          for (const src of localRefs) {
+            const clean = src
+              .split('?')[0]
+              .split('#')[0];
+
+            const resolved = path.normalize(
+              path.join('.', clean)
+            );
+
+            if (!fs.existsSync(resolved)) {
+              throw new Error(
+                `Missing local script: ${src}`
+              );
+            }
+
+            console.log(`Found script: ${src}`);
+          }
+
+          console.log('');
+          console.log('index.html references: OK');
+          NODE
+
+      # =========================================================
+      # 15. Check merge conflict markers
+      # =========================================================
+      - name: Check merge conflict markers
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        shell: bash
+        run: |
+          set -e
+
+          if grep -RInE \
+            '^(<<<<<<<|=======|>>>>>>>)' \
+            src \
+            tests \
+            index.html \
+            --exclude-dir=node_modules; then
+
+            echo ""
+            echo "ERROR: Merge conflict markers detected."
+            exit 1
+          fi
+
+          echo "Conflict marker check: OK"
+
+      # =========================================================
+      # 16. Check forbidden incorrect Phase 13 structure
+      # =========================================================
+      - name: Check Phase 13 architecture
+        working-directory: ${{ steps.locate_game.outputs.game_root }}
+        shell: bash
+        run: |
+          set -e
+
+          forbidden_files=(
+            "src/world/AdvancedWorldEvents.js"
+            "src/world/MapRules.js"
+            "src/npc/NPCSystem.js"
+            "src/story/StorySystem.js"
+          )
+
+          for file in "${forbidden_files[@]}"; do
+            if [ -f "$file" ]; then
+              echo "ERROR: Unexpected legacy Phase 13 file:"
+              echo "$file"
+              exit 1
+            fi
+          done
+
+          echo "Phase 13 architecture: OK"
+
+      # =========================================================
+      # 17. Configure GitHub Pages
+      # =========================================================
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      # =========================================================
+      # 18. Upload game to Pages artifact
+      # =========================================================
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ steps.locate_game.outputs.game_root }}
+
+      # =========================================================
+      # 19. Deploy to GitHub Pages
+      # =========================================================
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      # =========================================================
+      # 20. Final summary
+      # =========================================================
+      - name: Deployment summary
+        shell: bash
+        run: |
+          echo ""
+          echo "=================================================="
+          echo "          INFINITY DEPTHS DEPLOYMENT"
+          echo "=================================================="
+          echo ""
+          echo "Version: 0.13.0"
+          echo "Phase: 13"
+          echo ""
+          echo "Game URL:"
+          echo "${{ steps.deployment.outputs.page_url }}"
+          echo ""
+          echo "=================================================="
