@@ -1,0 +1,82 @@
+TAP version 13
+# Subtest: Phase 12: quest definitions are centralized and validated
+ok 1 - Phase 12: quest definitions are centralized and validated
+  ---
+  duration_ms: 15.874346
+  type: 'test'
+  ...
+# Subtest: Phase 12: quest system owns active progress and reacts to gameplay events
+ok 2 - Phase 12: quest system owns active progress and reacts to gameplay events
+  ---
+  duration_ms: 10.284879
+  type: 'test'
+  ...
+# Subtest: Phase 12: matched objectives count only matching events and item acquisition uses amounts
+ok 3 - Phase 12: matched objectives count only matching events and item acquisition uses amounts
+  ---
+  duration_ms: 5.01347
+  type: 'test'
+  ...
+# Subtest: Phase 12: completion emits exactly once and caps progress at target
+ok 4 - Phase 12: completion emits exactly once and caps progress at target
+  ---
+  duration_ms: 3.984381
+  type: 'test'
+  ...
+# Subtest: Phase 12: reward claiming is idempotent and emits a controlled request/claim pair
+ok 5 - Phase 12: reward claiming is idempotent and emits a controlled request/claim pair
+  ---
+  duration_ms: 8.571462
+  type: 'test'
+  ...
+# Subtest: Phase 12: quest persistence round-trips progress, completion, and claimed state
+ok 6 - Phase 12: quest persistence round-trips progress, completion, and claimed state
+  ---
+  duration_ms: 5.590743
+  type: 'test'
+  ...
+# Subtest: Phase 12: malformed quest save data is rejected
+ok 7 - Phase 12: malformed quest save data is rejected
+  ---
+  duration_ms: 6.918413
+  type: 'test'
+  ...
+# Subtest: Phase 12: defense placement publishes an event without coupling QuestSystem into DefenseManager
+ok 8 - Phase 12: defense placement publishes an event without coupling QuestSystem into DefenseManager
+  ---
+  duration_ms: 0.792795
+  type: 'test'
+  ...
+# Subtest: Phase 12: Game and index keep quest ownership and presentation boundaries
+ok 9 - Phase 12: Game and index keep quest ownership and presentation boundaries
+  ---
+  duration_ms: 1.168906
+  type: 'test'
+  ...
+# Subtest: Phase 12 regression: quest reward failure cannot partially grant currency or XP
+ok 10 - Phase 12 regression: quest reward failure cannot partially grant currency or XP
+  ---
+  duration_ms: 5.982395
+  type: 'test'
+  ...
+# Subtest: Phase 12 regression: runtime config version matches the Phase 12 package version
+ok 11 - Phase 12 regression: runtime config version matches the Phase 12 package version
+  ---
+  duration_ms: 4.4997
+  type: 'test'
+  ...
+# Subtest: Phase 12: Game persists a successful quest claim immediately
+ok 12 - Phase 12: Game persists a successful quest claim immediately
+  ---
+  duration_ms: 0.531682
+  type: 'test'
+  ...
+1..12
+# tests 12
+# suites 0
+# pass 12
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 291.881763

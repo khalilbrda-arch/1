@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>
+    Infinity Depths — أعماق اللانهاية
+  </title>
+
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+
+      overflow: hidden;
+
+      background: #0a1420;
+
+      height: 100%;
+      width: 100%;
+    }
+
+    #game-container {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    #boot-screen {
+      position: fixed;
+
+      inset: 0;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+      justify-content: center;
+
+      background: #0a1420;
+
+      color: #8fd3ff;
+
+      font-family:
+        -apple-system,
+        system-ui,
+        sans-serif;
+
+      z-index: 100;
+    }
+
+    #boot-screen h1 {
+      font-size: 20px;
+
+      letter-spacing: 2px;
+
+      margin: 0 0 8px;
+    }
+
+    #boot-screen p {
+      font-size: 12px;
+
+      opacity: 0.6;
+
+      margin: 0;
+    }
+
+    #debug-hud {
+      display: none;
+      position: fixed;
+
+      top: 8px;
+      left: 8px;
+
+      color: #7fffb0;
+
+      font-family: monospace;
+
+      font-size: 11px;
+
+      background:
+        rgba(0, 0, 0, 0.4);
+
+      padding: 4px 8px;
+
+      border-radius: 4px;
+
+      z-index: 50;
+
+      pointer-events: none;
+    }
+
+    #controls-hint {
+      position: fixed;
+
+      bottom: 14px;
+
+      left: 0;
+      right: 0;
+
+      text-align: center;
+
+      font-family:
+        -apple-system,
+        system-ui,
+        sans-serif;
+
+      color: #eaf4ff;
+
+      font-size: 12px;
+
+      opacity: 0.55;
+
+      z-index: 45;
+
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================================
+       BOOT SCREEN
+  ========================================== -->
+
+  <div id="boot-screen">
+
+    <h1>
+      INFINITE DEPTHS
+    </h1>
+
+    <p>
+      جارِ تحميل العالم...
+    </p>
+
+  </div>
+
+
+  <!-- =========================================
+       DEBUG HUD
+  ========================================== -->
+
+  <div id="debug-hud">
+    FPS: --
+  </div>
+
+
+  <!-- =========================================
+       CONTROLS HINT
+  ========================================== -->
+
+
+
+
+  <!-- =========================================
+       GAME CONTAINER
+  ========================================== -->
+
+  <div id="game-container"></div>
+
+
+  <!-- =========================================
+       THREE.JS
+       r128 — ثابت حسب المشروع
+  ========================================== -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+
+  <!-- =========================================
+       CORE
+  ========================================== -->
+
+  <script src="src/core/Config.js?v=18"></script>
+
+  <script src="src/core/DataContracts.js?v=18"></script>
+
+  <script src="src/core/EventBus.js?v=18"></script>
+
+  <script src="src/core/GameState.js?v=18"></script>
+
+  <script src="src/core/Time.js?v=21"></script>
+  <script src="src/world/WorldSystem.js?v=21"></script>
+
+  <script src="src/progression/ProgressionSystem.js?v=19"></script>
+
+  <script src="src/collection/CollectionSystem.js?v=19"></script>
+  <script src="src/quests/QuestSystem.js?v=20"></script>
+<script src="src/world/AdvancedWorldSystem.js?v=1"></script>
+
+
+  <!-- =========================================
+       UI
+  ========================================== -->
+
+  <script src="src/ui/Toast.js?v=18"></script>
+
+  <script src="src/ui/BaseHUD.js?v=18"></script>
+
+  <script src="src/ui/EconomyUI.js?v=18"></script>
+
+  <script src="src/ui/WaveUI.js?v=18"></script>
+  <script src="src/ui/BossUI.js?v=19"></script>
+
+  <script src="src/ui/GameOverUI.js?v=18"></script>
+
+  <script src="src/ui/DefenseUI.js?v=18"></script>
+
+  <script src="src/ui/ProgressionUI.js?v=19"></script>
+
+  <script src="src/ui/CollectionUI.js?v=20"></script>
+<script src="src/ui/QuestUI.js?v=20"></script>
+
+
+  <!-- =========================================
+       WORLD
+  ========================================== -->
+
+  <script src="src/world/Ocean.js?v=18"></script>
+
+  <script src="src/world/Island.js?v=18"></script>
+
+  <script src="src/world/Interactables.js?v=18"></script>
+
+  <script src="src/world/DefenseMap.js?v=18"></script>
+
+
+  <!-- =========================================
+       ENEMIES — STAGE 6
+  ========================================== -->
+
+  <script src="src/enemies/EnemyPath.js?v=18"></script>
+
+  <script src="src/enemies/Enemy.js?v=18"></script>
+
+  <script src="src/enemies/EnemyManager.js?v=19"></script>
+  <script src="src/bosses/BossSystem.js?v=19"></script>
+
+
+  <!-- =========================================
+       WAVES — STAGE 7
+  ========================================== -->
+
+  <script src="src/waves/WaveManager.js?v=18"></script>
+
+  <script src="src/waves/WaveOrchestrator.js?v=18"></script>
+
+
+  <!-- =========================================
+       COMBAT — ARCHITECTURE FOUNDATION
+       CombatSystem يجب تحميله قبل Projectile
+       لأن Projectile يعتمد عليه لحل الإصابة.
+  ========================================== -->
+
+  <script src="src/combat/CombatSystem.js?v=18"></script>
+
+  <script src="src/combat/Projectile.js?v=18"></script>
+
+  <script src="src/combat/ProjectileManager.js?v=18"></script>
+
+
+  <!-- =========================================
+       ECONOMY — ARCHITECTURE FOUNDATION
+       EconomySystem يجب تحميله قبل DefenseManager
+       لأن DefenseManager يعتمد عليه في معاملات العملة.
+  ========================================== -->
+
+  <script src="src/economy/EconomySystem.js?v=18"></script>
+  <script src="src/merge/MergeSystem.js?v=19"></script>
+
+
+  <!-- =========================================
+       DEFENSES — STAGE 8
+  ========================================== -->
+
+  <script src="src/defenses/Defense.js?v=18"></script>
+
+  <script src="src/defenses/DefenseManager.js?v=18"></script>
+
+
+  <!-- =========================================
+       INPUT
+  ========================================== -->
+
+  <script src="src/input/TouchControls.js?v=18"></script>
+
+
+  <!-- =========================================
+       CAMERA
+  ========================================== -->
+
+  <script src="src/camera/CameraController.js?v=18"></script>
+
+
+  <!-- =========================================
+       INTERACTION
+  ========================================== -->
+
+  <script src="src/interaction/InteractionController.js?v=18"></script>
+
+
+  <!-- =========================================
+       SAVE / RELOAD — PHASE 5 (VERTICAL SLICE)
+       يجب أن يُحمَّل قبل Game.js.
+  ========================================== -->
+
+  <script src="src/save/SaveManager.js?v=20"></script>
+  <script src="src/ui/ProUI.js?v=1"></script>
+  <script src="src/ui/WorldFX.js?v=1"></script>
+
+
+  <!-- =========================================
+       MAIN GAME
+       يجب أن يكون الأخير
+  ========================================== -->
+
+  <script src="src/core/Game.js?v=21"></script>
+
+</body>
+
+</html>

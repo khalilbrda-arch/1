@@ -1,0 +1,1163 @@
+
+> infinity-depths@0.13.0 test
+> node --test tests/*.test.js
+
+TAP version 13
+# Subtest: Phase 10: boss definitions are centralized and validated
+ok 1 - Phase 10: boss definitions are centralized and validated
+  ---
+  duration_ms: 76.344846
+  type: 'test'
+  ...
+# Subtest: Phase 10: boss waves and spawn data are deterministic
+ok 2 - Phase 10: boss waves and spawn data are deterministic
+  ---
+  duration_ms: 7.083315
+  type: 'test'
+  ...
+# Subtest: Phase 10: boss phases and enrage are deterministic
+ok 3 - Phase 10: boss phases and enrage are deterministic
+  ---
+  duration_ms: 13.609726
+  type: 'test'
+  ...
+# Subtest: Phase 10: boss ability is emitted with an actual gameplay effect payload
+ok 4 - Phase 10: boss ability is emitted with an actual gameplay effect payload
+  ---
+  duration_ms: 5.180102
+  type: 'test'
+  ...
+# Subtest: Phase 10: boss death emits a single reward boundary
+ok 5 - Phase 10: boss death emits a single reward boundary
+  ---
+  duration_ms: 5.395421
+  type: 'test'
+  ...
+# Subtest: Phase 10: boss state clears when the boss reaches the base or the base is destroyed
+ok 6 - Phase 10: boss state clears when the boss reaches the base or the base is destroyed
+  ---
+  duration_ms: 3.329317
+  type: 'test'
+  ...
+# Subtest: Phase 10: source architecture keeps boss UI presentation-only and integrates boss hooks
+ok 7 - Phase 10: source architecture keeps boss UI presentation-only and integrates boss hooks
+  ---
+  duration_ms: 0.654271
+  type: 'test'
+  ...
+# Subtest: Phase 10 regression: Game does not award a boss reward through the generic EnemyDied boundary
+ok 8 - Phase 10 regression: Game does not award a boss reward through the generic EnemyDied boundary
+  ---
+  duration_ms: 0.297842
+  type: 'test'
+  ...
+# Subtest: Phase 10 regression: boss enrage ability multiplier is data-driven
+ok 9 - Phase 10 regression: boss enrage ability multiplier is data-driven
+  ---
+  duration_ms: 4.135294
+  type: 'test'
+  ...
+# Subtest: Phase 11: world definitions are centralized and deterministic
+ok 10 - Phase 11: world definitions are centralized and deterministic
+  ---
+  duration_ms: 11.263294
+  type: 'test'
+  ...
+# Subtest: Phase 11: day/night cycle wraps deterministically
+ok 11 - Phase 11: day/night cycle wraps deterministically
+  ---
+  duration_ms: 15.553415
+  type: 'test'
+  ...
+# Subtest: Phase 11: weather and world events publish isolated modifier contracts
+ok 12 - Phase 11: weather and world events publish isolated modifier contracts
+  ---
+  duration_ms: 6.178139
+  type: 'test'
+  ...
+# Subtest: Phase 11: world modifiers affect enemy speed and defense range through events
+ok 13 - Phase 11: world modifiers affect enemy speed and defense range through events
+  ---
+  duration_ms: 6.483454
+  type: 'test'
+  ...
+# Subtest: Phase 11: world state is explicitly owned and no world system writes localStorage
+ok 14 - Phase 11: world state is explicitly owned and no world system writes localStorage
+  ---
+  duration_ms: 0.366835
+  type: 'test'
+  ...
+# Subtest: Phase 11: index integrates WorldSystem once and Game remains the integration boundary
+ok 15 - Phase 11: index integrates WorldSystem once and Game remains the integration boundary
+  ---
+  duration_ms: 0.631663
+  type: 'test'
+  ...
+# Subtest: Phase 11 regression: newly spawned/placed objects inherit the current world modifier through Game integration
+ok 16 - Phase 11 regression: newly spawned/placed objects inherit the current world modifier through Game integration
+  ---
+  duration_ms: 0.422554
+  type: 'test'
+  ...
+# Subtest: Phase 12: quest definitions are centralized and validated
+ok 17 - Phase 12: quest definitions are centralized and validated
+  ---
+  duration_ms: 17.213864
+  type: 'test'
+  ...
+# Subtest: Phase 12: quest system owns active progress and reacts to gameplay events
+ok 18 - Phase 12: quest system owns active progress and reacts to gameplay events
+  ---
+  duration_ms: 11.533007
+  type: 'test'
+  ...
+# Subtest: Phase 12: matched objectives count only matching events and item acquisition uses amounts
+ok 19 - Phase 12: matched objectives count only matching events and item acquisition uses amounts
+  ---
+  duration_ms: 4.530016
+  type: 'test'
+  ...
+# Subtest: Phase 12: completion emits exactly once and caps progress at target
+ok 20 - Phase 12: completion emits exactly once and caps progress at target
+  ---
+  duration_ms: 3.836328
+  type: 'test'
+  ...
+# Subtest: Phase 12: reward claiming is idempotent and emits a controlled request/claim pair
+ok 21 - Phase 12: reward claiming is idempotent and emits a controlled request/claim pair
+  ---
+  duration_ms: 8.094644
+  type: 'test'
+  ...
+# Subtest: Phase 12: quest persistence round-trips progress, completion, and claimed state
+ok 22 - Phase 12: quest persistence round-trips progress, completion, and claimed state
+  ---
+  duration_ms: 5.692684
+  type: 'test'
+  ...
+# Subtest: Phase 12: malformed quest save data is rejected
+ok 23 - Phase 12: malformed quest save data is rejected
+  ---
+  duration_ms: 12.901304
+  type: 'test'
+  ...
+# Subtest: Phase 12: defense placement publishes an event without coupling QuestSystem into DefenseManager
+ok 24 - Phase 12: defense placement publishes an event without coupling QuestSystem into DefenseManager
+  ---
+  duration_ms: 0.842439
+  type: 'test'
+  ...
+# Subtest: Phase 12: Game and index keep quest ownership and presentation boundaries
+ok 25 - Phase 12: Game and index keep quest ownership and presentation boundaries
+  ---
+  duration_ms: 3.665333
+  type: 'test'
+  ...
+# Subtest: Phase 12 regression: quest reward failure cannot partially grant currency or XP
+ok 26 - Phase 12 regression: quest reward failure cannot partially grant currency or XP
+  ---
+  duration_ms: 13.875832
+  type: 'test'
+  ...
+# Subtest: Phase 12 regression: runtime config version matches the current package version
+ok 27 - Phase 12 regression: runtime config version matches the current package version
+  ---
+  duration_ms: 4.756086
+  type: 'test'
+  ...
+# Subtest: Phase 12: Game persists a successful quest claim immediately
+ok 28 - Phase 12: Game persists a successful quest claim immediately
+  ---
+  duration_ms: 0.538724
+  type: 'test'
+  ...
+# Subtest: Phase 13: advanced-world configuration is centralized and validated
+ok 29 - Phase 13: advanced-world configuration is centralized and validated
+  ---
+  duration_ms: 28.325095
+  type: 'test'
+  ...
+# Subtest: Phase 13: NPC interaction is owned by AdvancedWorldSystem and persists visit counts
+ok 30 - Phase 13: NPC interaction is owned by AdvancedWorldSystem and persists visit counts
+  ---
+  duration_ms: 5.147143
+  type: 'test'
+  ...
+# Subtest: Phase 13: story chapters advance from events without UI coupling
+ok 31 - Phase 13: story chapters advance from events without UI coupling
+  ---
+  duration_ms: 6.346612
+  type: 'test'
+  ...
+# Subtest: Phase 13: tidal surge activates and ending it clears the special map rule
+ok 32 - Phase 13: tidal surge activates and ending it clears the special map rule
+  ---
+  duration_ms: 3.679937
+  type: 'test'
+  ...
+# Subtest: Phase 13: dynamic world events are deterministic and counted once per start
+ok 33 - Phase 13: dynamic world events are deterministic and counted once per start
+  ---
+  duration_ms: 3.379557
+  type: 'test'
+  ...
+# Subtest: Phase 13: advanced-world save data round-trips and malformed data is rejected
+ok 34 - Phase 13: advanced-world save data round-trips and malformed data is rejected
+  ---
+  duration_ms: 6.801068
+  type: 'test'
+  ...
+# Subtest: Phase 13: NPC meshes are routed through the existing interaction boundary
+ok 35 - Phase 13: NPC meshes are routed through the existing interaction boundary
+  ---
+  duration_ms: 0.387064
+  type: 'test'
+  ...
+# Subtest: Phase 13: build validation includes advanced map rules
+ok 36 - Phase 13: build validation includes advanced map rules
+  ---
+  duration_ms: 0.356081
+  type: 'test'
+  ...
+# Subtest: Phase 13 regression: advanced-world state has safe defaults for old saves
+ok 37 - Phase 13 regression: advanced-world state has safe defaults for old saves
+  ---
+  duration_ms: 4.812764
+  type: 'test'
+  ...
+# Subtest: Phase 13 regression: package and runtime versions match
+ok 38 - Phase 13 regression: package and runtime versions match
+  ---
+  duration_ms: 3.662153
+  type: 'test'
+  ...
+# ========================================
+# Infinity Depths — Phase 4 Static Architecture Audit
+# ========================================
+# Source files scanned: 42
+# Architecture boundaries: enforced
+# GameState ownership: enforced
+# EventBus boundary: enforced
+# Syntax validation: enforced
+# Subtest: Architecture Audit: required Phase 4 core files exist
+ok 39 - Architecture Audit: required Phase 4 core files exist
+  ---
+  duration_ms: 7.900768
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: GameState is not referenced outside approved boundaries
+ok 40 - Architecture Audit: GameState is not referenced outside approved boundaries
+  ---
+  duration_ms: 13.007981
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: WaveManager does not depend on GameState
+ok 41 - Architecture Audit: WaveManager does not depend on GameState
+  ---
+  duration_ms: 0.386407
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: WaveManager uses EventBus for BaseDestroyed
+ok 42 - Architecture Audit: WaveManager uses EventBus for BaseDestroyed
+  ---
+  duration_ms: 0.23214
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: Game owns EnemyReachedBase coordination
+ok 43 - Architecture Audit: Game owns EnemyReachedBase coordination
+  ---
+  duration_ms: 0.505005
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: Game emits BaseDestroyed after the state transition
+ok 44 - Architecture Audit: Game emits BaseDestroyed after the state transition
+  ---
+  duration_ms: 0.597496
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: EventBus exposes the required event boundary API
+ok 45 - Architecture Audit: EventBus exposes the required event boundary API
+  ---
+  duration_ms: 0.604374
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: GameState remains a state owner, not an event coordinator
+ok 46 - Architecture Audit: GameState remains a state owner, not an event coordinator
+  ---
+  duration_ms: 0.309258
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: EventBus remains infrastructure-neutral
+ok 47 - Architecture Audit: EventBus remains infrastructure-neutral
+  ---
+  duration_ms: 0.844448
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: core EventBus does not depend on gameplay systems
+ok 48 - Architecture Audit: core EventBus does not depend on gameplay systems
+  ---
+  duration_ms: 1.845531
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: no source file references itself as a system dependency
+ok 49 - Architecture Audit: no source file references itself as a system dependency
+  ---
+  duration_ms: 7.263987
+  type: 'test'
+  ...
+# Subtest: Architecture Audit: all source JavaScript files are syntactically valid
+ok 50 - Architecture Audit: all source JavaScript files are syntactically valid
+  ---
+  duration_ms: 13.642749
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: foundation contracts and boundaries exist
+ok 51 - Architecture Gate: foundation contracts and boundaries exist
+  ---
+  duration_ms: 2.412972
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: Economy owns currency runtime and does not depend on GameState
+ok 52 - Architecture Gate: Economy owns currency runtime and does not depend on GameState
+  ---
+  duration_ms: 1.039056
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: Game is the integration boundary for currency synchronization
+ok 53 - Architecture Gate: Game is the integration boundary for currency synchronization
+  ---
+  duration_ms: 0.74753
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: data-contract boundary is implemented for current core content
+ok 54 - Architecture Gate: data-contract boundary is implemented for current core content
+  ---
+  duration_ms: 5.407841
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: EventBus remains infrastructure-only
+ok 55 - Architecture Gate: EventBus remains infrastructure-only
+  ---
+  duration_ms: 1.126072
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: save ownership is explicitly separated from gameplay state
+ok 56 - Architecture Gate: save ownership is explicitly separated from gameplay state
+  ---
+  duration_ms: 1.740553
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: UI does not directly own authoritative gameplay state
+ok 57 - Architecture Gate: UI does not directly own authoritative gameplay state
+  ---
+  duration_ms: 1.214275
+  type: 'test'
+  ...
+# Subtest: Architecture Gate: current architecture audit is present and regression suite remains part of the gate
+ok 58 - Architecture Gate: current architecture audit is present and regression suite remains part of the gate
+  ---
+  duration_ms: 0.659309
+  type: 'test'
+  ...
+# ========================================
+# Infinity Depths — Phase 4 Foundation Tests
+# ========================================
+# DataContracts: CONFIG is not available.
+# DataContracts: CONFIG is not available.
+# DataContracts: CONFIG is not available.
+# DataContracts: CONFIG is not available.
+# CombatSystem: invalid projectile damage amount. -10
+# Subtest: EventBus: registers and emits listeners
+ok 59 - EventBus: registers and emits listeners
+  ---
+  duration_ms: 10.447273
+  type: 'test'
+  ...
+# Subtest: EventBus: off removes a listener
+ok 60 - EventBus: off removes a listener
+  ---
+  duration_ms: 2.286053
+  type: 'test'
+  ...
+# Subtest: EventBus: isolated events do not cross-trigger
+ok 61 - EventBus: isolated events do not cross-trigger
+  ---
+  duration_ms: 2.1487
+  type: 'test'
+  ...
+# Subtest: DataContracts: accepts valid enemy definition
+ok 62 - DataContracts: accepts valid enemy definition
+  ---
+  duration_ms: 4.039131
+  type: 'test'
+  ...
+# Subtest: DataContracts: rejects invalid enemy definition
+ok 63 - DataContracts: rejects invalid enemy definition
+  ---
+  duration_ms: 3.110111
+  type: 'test'
+  ...
+# Subtest: DataContracts: accepts valid defense definition
+ok 64 - DataContracts: accepts valid defense definition
+  ---
+  duration_ms: 3.767601
+  type: 'test'
+  ...
+# Subtest: DataContracts: rejects defense definition without id
+ok 65 - DataContracts: rejects defense definition without id
+  ---
+  duration_ms: 7.630267
+  type: 'test'
+  ...
+# Subtest: GameState: interaction registration does not mutate currency
+ok 66 - GameState: interaction registration does not mutate currency
+  ---
+  duration_ms: 4.429637
+  type: 'test'
+  ...
+# Subtest: GameState: duplicate interaction is rejected
+ok 67 - GameState: duplicate interaction is rejected
+  ---
+  duration_ms: 7.464884
+  type: 'test'
+  ...
+# Subtest: EconomySystem: add increases balance
+ok 68 - EconomySystem: add increases balance
+  ---
+  duration_ms: 3.938223
+  type: 'test'
+  ...
+# Subtest: EconomySystem: spend rejects insufficient balance
+ok 69 - EconomySystem: spend rejects insufficient balance
+  ---
+  duration_ms: 2.836434
+  type: 'test'
+  ...
+# Subtest: EconomySystem: spend removes exactly the requested amount
+ok 70 - EconomySystem: spend removes exactly the requested amount
+  ---
+  duration_ms: 2.180434
+  type: 'test'
+  ...
+# Subtest: CombatSystem: forwards valid projectile hit to EnemyManager
+ok 71 - CombatSystem: forwards valid projectile hit to EnemyManager
+  ---
+  duration_ms: 2.730303
+  type: 'test'
+  ...
+# Subtest: CombatSystem: rejects invalid damage
+ok 72 - CombatSystem: rejects invalid damage
+  ---
+  duration_ms: 2.678946
+  type: 'test'
+  ...
+# Subtest: CombatSystem: ignores dead target
+ok 73 - CombatSystem: ignores dead target
+  ---
+  duration_ms: 2.279309
+  type: 'test'
+  ...
+# Subtest: Architecture: Projectile does not directly call EnemyManager.damageEnemy
+ok 74 - Architecture: Projectile does not directly call EnemyManager.damageEnemy
+  ---
+  duration_ms: 0.42523
+  type: 'test'
+  ...
+# Subtest: Architecture: GameState interaction does not add currency
+ok 75 - Architecture: GameState interaction does not add currency
+  ---
+  duration_ms: 0.382021
+  type: 'test'
+  ...
+# Subtest: Architecture: Game initializes EconomySystem
+ok 76 - Architecture: Game initializes EconomySystem
+  ---
+  duration_ms: 1.032494
+  type: 'test'
+  ...
+# Subtest: Architecture: Game subscribes to EnemyDied
+ok 77 - Architecture: Game subscribes to EnemyDied
+  ---
+  duration_ms: 0.430969
+  type: 'test'
+  ...
+# Subtest: Architecture: Game subscribes to EnemyReachedBase
+ok 78 - Architecture: Game subscribes to EnemyReachedBase
+  ---
+  duration_ms: 0.442112
+  type: 'test'
+  ...
+# ========================================
+# Infinity Depths — Phase 4 Integration Tests
+# ========================================
+# Game: GameOverUI is not available.
+# Subtest: Integration: EnemyDied event rewards currency through Game
+ok 79 - Integration: EnemyDied event rewards currency through Game
+  ---
+  duration_ms: 14.609031
+  type: 'test'
+  ...
+# Subtest: Integration: EnemyDied event preserves existing currency
+ok 80 - Integration: EnemyDied event preserves existing currency
+  ---
+  duration_ms: 3.091032
+  type: 'test'
+  ...
+# Subtest: Integration: EnemyReachedBase event damages base through Game
+ok 81 - Integration: EnemyReachedBase event damages base through Game
+  ---
+  duration_ms: 3.197021
+  type: 'test'
+  ...
+# Subtest: Integration: EnemyReachedBase event cannot reduce base below zero
+ok 82 - Integration: EnemyReachedBase event cannot reduce base below zero
+  ---
+  duration_ms: 5.063402
+  type: 'test'
+  ...
+# Subtest: Integration: CombatSystem forwards projectile damage to EnemyManager
+ok 83 - Integration: CombatSystem forwards projectile damage to EnemyManager
+  ---
+  duration_ms: 2.943103
+  type: 'test'
+  ...
+# Subtest: Integration: CombatSystem does not damage dead enemies
+ok 84 - Integration: CombatSystem does not damage dead enemies
+  ---
+  duration_ms: 1.818358
+  type: 'test'
+  ...
+# Subtest: Integration: EnemyDied does not damage base
+ok 85 - Integration: EnemyDied does not damage base
+  ---
+  duration_ms: 2.157319
+  type: 'test'
+  ...
+# Subtest: Integration: EnemyReachedBase does not reward currency
+ok 86 - Integration: EnemyReachedBase does not reward currency
+  ---
+  duration_ms: 4.397828
+  type: 'test'
+  ...
+# ========================================
+# Infinity Depths — Phase 4 Regression Tests
+# ========================================
+# Game: GameOverUI is not available.
+# Game: GameOverUI is not available.
+# Game: EconomySystem is not available.
+# Subtest: Regression: WaveManager has no direct GameState dependency
+ok 87 - Regression: WaveManager has no direct GameState dependency
+  ---
+  duration_ms: 6.713731
+  type: 'test'
+  ...
+# Subtest: Regression: WaveManager listens for BaseDestroyed through EventBus
+ok 88 - Regression: WaveManager listens for BaseDestroyed through EventBus
+  ---
+  duration_ms: 0.440479
+  type: 'test'
+  ...
+# Subtest: Regression: Game owns the EnemyReachedBase -> GameState boundary
+ok 89 - Regression: Game owns the EnemyReachedBase -> GameState boundary
+  ---
+  duration_ms: 0.638799
+  type: 'test'
+  ...
+# Subtest: Regression: Game emits BaseDestroyed
+ok 90 - Regression: Game emits BaseDestroyed
+  ---
+  duration_ms: 9.687938
+  type: 'test'
+  ...
+# Subtest: Regression: destroying the base emits BaseDestroyed
+ok 91 - Regression: destroying the base emits BaseDestroyed
+  ---
+  duration_ms: 15.609769
+  type: 'test'
+  ...
+# Subtest: Regression: BaseDestroyed is emitted only on the transition to destroyed
+ok 92 - Regression: BaseDestroyed is emitted only on the transition to destroyed
+  ---
+  duration_ms: 3.75534
+  type: 'test'
+  ...
+# Subtest: Regression: non-lethal base damage does not emit BaseDestroyed
+ok 93 - Regression: non-lethal base damage does not emit BaseDestroyed
+  ---
+  duration_ms: 3.406038
+  type: 'test'
+  ...
+# Subtest: Regression: EnemyDied does not emit BaseDestroyed
+ok 94 - Regression: EnemyDied does not emit BaseDestroyed
+  ---
+  duration_ms: 4.80731
+  type: 'test'
+  ...
+# Subtest: كل ملفات src/ تُحمَّل بالترتيب الحقيقي لـ index.html في نطاق واحد مشترك بدون رمي أي استثناء
+ok 95 - كل ملفات src/ تُحمَّل بالترتيب الحقيقي لـ index.html في نطاق واحد مشترك بدون رمي أي استثناء
+  ---
+  duration_ms: 25.731889
+  type: 'test'
+  ...
+# Subtest: كل الكائنات الـ singleton المتوقعة تُصبح 'object' وليست 'function' (خطأ Risk 7 لن يتكرر)
+ok 96 - كل الكائنات الـ singleton المتوقعة تُصبح 'object' وليست 'function' (خطأ Risk 7 لن يتكرر)
+  ---
+  duration_ms: 9.515999
+  type: 'test'
+  ...
+# Subtest: Game.init موجودة كدالة، وWaveManager/EconomySystem/DefenseManager تحمل الدوال الأساسية المتوقعة بعد التحميل الكامل
+ok 97 - Game.init موجودة كدالة، وWaveManager/EconomySystem/DefenseManager تحمل الدوال الأساسية المتوقعة بعد التحميل الكامل
+  ---
+  duration_ms: 21.869935
+  type: 'test'
+  ...
+# Subtest: DataContracts.validateConfig() يُنفَّذ فوريًا عند التحميل (سطر أعلى الملف) ولا يرمي استثناءً مقابل CONFIG الحقيقي
+ok 98 - DataContracts.validateConfig() يُنفَّذ فوريًا عند التحميل (سطر أعلى الملف) ولا يرمي استثناءً مقابل CONFIG الحقيقي
+  ---
+  duration_ms: 36.984161
+  type: 'test'
+  ...
+# Subtest: Interactables.create() skips spawning entries whose id is already in the provided already-opened list
+ok 99 - Interactables.create() skips spawning entries whose id is already in the provided already-opened list
+  ---
+  duration_ms: 10.72821
+  type: 'test'
+  ...
+# Subtest: Interactables.create() with no already-opened list (fresh game) spawns every configured entry
+ok 100 - Interactables.create() with no already-opened list (fresh game) spawns every configured entry
+  ---
+  duration_ms: 9.764902
+  type: 'test'
+  ...
+# Subtest: Interactables.interact() collects a fresh entry exactly once and emits InteractableConsumed with its id
+ok 101 - Interactables.interact() collects a fresh entry exactly once and emits InteractableConsumed with its id
+  ---
+  duration_ms: 7.264621
+  type: 'test'
+  ...
+# Subtest: Interactables.interact() refuses an id that was already in the already-opened list passed to create()
+ok 102 - Interactables.interact() refuses an id that was already in the already-opened list passed to create()
+  ---
+  duration_ms: 43.330637
+  type: 'test'
+  ...
+# SaveManager: stored save is corrupted JSON — ignoring it. SyntaxError: Expected property name or '}' in JSON at position 2 (line 1 column 3)
+#     at JSON.parse (<anonymous>)
+#     at Object.load (src/save/SaveManager.js:397:19)
+#     at evalmachine.<anonymous>:1:13
+#     at Script.runInContext (node:vm:149:12)
+#     at Object.runInContext (node:vm:301:6)
+#     at TestContext.<anonymous> (/mnt/data/phase13/tests/phase5-save-reload.test.js:304:19)
+#     at Test.runInAsyncScope (node:async_hooks:214:14)
+#     at Test.run (node:internal/test_runner/test:1047:25)
+#     at Test.processPendingSubtests (node:internal/test_runner/test:744:18)
+#     at Test.postRun (node:internal/test_runner/test:1173:19)
+# SaveManager: stored save failed validation — ignoring it.
+# DefenseManager: restoreDefense() — unknown defense type, skipping. does_not_exist
+# Subtest: SaveManager.serialize() builds plain data from live sources
+ok 103 - SaveManager.serialize() builds plain data from live sources
+  ---
+  duration_ms: 19.289567
+  type: 'test'
+  ...
+# Subtest: SaveManager.serialize() never includes runtime/Three.js-shaped fields
+ok 104 - SaveManager.serialize() never includes runtime/Three.js-shaped fields
+  ---
+  duration_ms: 3.695832
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() accepts a well-formed save
+ok 105 - SaveManager.validate() accepts a well-formed save
+  ---
+  duration_ms: 3.625674
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: null
+ok 106 - SaveManager.validate() rejects: null
+  ---
+  duration_ms: 2.120134
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: not an object
+ok 107 - SaveManager.validate() rejects: not an object
+  ---
+  duration_ms: 2.372782
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: wrong schemaVersion
+ok 108 - SaveManager.validate() rejects: wrong schemaVersion
+  ---
+  duration_ms: 2.534197
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: negative wave
+ok 109 - SaveManager.validate() rejects: negative wave
+  ---
+  duration_ms: 2.218919
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: negative currency
+ok 110 - SaveManager.validate() rejects: negative currency
+  ---
+  duration_ms: 2.107053
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: NaN currency
+ok 111 - SaveManager.validate() rejects: NaN currency
+  ---
+  duration_ms: 3.176654
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: base hp greater than maxHp
+ok 112 - SaveManager.validate() rejects: base hp greater than maxHp
+  ---
+  duration_ms: 2.537004
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: interactions not an array
+ok 113 - SaveManager.validate() rejects: interactions not an array
+  ---
+  duration_ms: 1.761146
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: defenses missing typeId
+ok 114 - SaveManager.validate() rejects: defenses missing typeId
+  ---
+  duration_ms: 1.625264
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate() rejects: defenses not an array
+ok 115 - SaveManager.validate() rejects: defenses not an array
+  ---
+  duration_ms: 1.875869
+  type: 'test'
+  ...
+# Subtest: save() then load() round-trips through an injected storage backend
+ok 116 - save() then load() round-trips through an injected storage backend
+  ---
+  duration_ms: 29.94312
+  type: 'test'
+  ...
+# Subtest: load() returns null and does not throw when no save exists
+ok 117 - load() returns null and does not throw when no save exists
+  ---
+  duration_ms: 4.36411
+  type: 'test'
+  ...
+# Subtest: load() returns null (not a throw) for corrupted JSON
+ok 118 - load() returns null (not a throw) for corrupted JSON
+  ---
+  duration_ms: 5.470376
+  type: 'test'
+  ...
+# Subtest: load() returns null for structurally invalid (but parseable) saved data
+ok 119 - load() returns null for structurally invalid (but parseable) saved data
+  ---
+  duration_ms: 2.368663
+  type: 'test'
+  ...
+# Subtest: save()/load() behave safely with no storage backend available
+ok 120 - save()/load() behave safely with no storage backend available
+  ---
+  duration_ms: 1.635028
+  type: 'test'
+  ...
+# Subtest: applyToGameState()/applyToWaveManager() restore runtime state from a save
+ok 121 - applyToGameState()/applyToWaveManager() restore runtime state from a save
+  ---
+  duration_ms: 2.458373
+  type: 'test'
+  ...
+# Subtest: applyToGameState() clamps restored base hp to the current config maxHp
+ok 122 - applyToGameState() clamps restored base hp to the current config maxHp
+  ---
+  duration_ms: 1.842339
+  type: 'test'
+  ...
+# Subtest: DefenseManager.restoreDefense() rebuilds a saved defense without placement/economy checks
+ok 123 - DefenseManager.restoreDefense() rebuilds a saved defense without placement/economy checks
+  ---
+  duration_ms: 7.269841
+  type: 'test'
+  ...
+# Subtest: DefenseManager.restoreDefense() advances nextId past restored numeric ids
+ok 124 - DefenseManager.restoreDefense() advances nextId past restored numeric ids
+  ---
+  duration_ms: 6.984954
+  type: 'test'
+  ...
+# Subtest: DefenseManager.restoreDefense() rejects an unknown typeId without throwing
+ok 125 - DefenseManager.restoreDefense() rejects an unknown typeId without throwing
+  ---
+  duration_ms: 4.600069
+  type: 'test'
+  ...
+# Subtest: full boot simulation: save at wave completion, then a fresh boot restores it
+ok 126 - full boot simulation: save at wave completion, then a fresh boot restores it
+  ---
+  duration_ms: 7.928339
+  type: 'test'
+  ...
+# Subtest: WaveManager resolves to the singleton instance, not the class
+ok 127 - WaveManager resolves to the singleton instance, not the class
+  ---
+  duration_ms: 6.012611
+  type: 'test'
+  ...
+# Subtest: WaveManager.isGameOver() reflects base-destroyed state
+ok 128 - WaveManager.isGameOver() reflects base-destroyed state
+  ---
+  duration_ms: 7.848856
+  type: 'test'
+  ...
+# Subtest: WaveOrchestrator wave 1 matches CONFIG.WAVES.BASE_ENEMY exactly
+ok 129 - WaveOrchestrator wave 1 matches CONFIG.WAVES.BASE_ENEMY exactly
+  ---
+  duration_ms: 8.983159
+  type: 'test'
+  ...
+# Subtest: WaveOrchestrator later waves scale up HP, damage, reward and quantity
+ok 130 - WaveOrchestrator later waves scale up HP, damage, reward and quantity
+  ---
+  duration_ms: 3.531421
+  type: 'test'
+  ...
+# Subtest: WaveOrchestrator quantity never exceeds QUANTITY_MAX
+ok 131 - WaveOrchestrator quantity never exceeds QUANTITY_MAX
+  ---
+  duration_ms: 7.913631
+  type: 'test'
+  ...
+# Subtest: Vertical slice: countdown -> wave 1 starts with the configured enemy count
+ok 132 - Vertical slice: countdown -> wave 1 starts with the configured enemy count
+  ---
+  duration_ms: 6.321674
+  type: 'test'
+  ...
+# Subtest: Vertical slice: enemies actually get spawned through EnemyManager
+ok 133 - Vertical slice: enemies actually get spawned through EnemyManager
+  ---
+  duration_ms: 4.228482
+  type: 'test'
+  ...
+# Subtest: Vertical slice: defeating every enemy completes the wave and starts a countdown to the next one
+ok 134 - Vertical slice: defeating every enemy completes the wave and starts a countdown to the next one
+  ---
+  duration_ms: 9.388318
+  type: 'test'
+  ...
+# Subtest: Vertical slice: BaseDestroyed stops the orchestrator without throwing
+ok 135 - Vertical slice: BaseDestroyed stops the orchestrator without throwing
+  ---
+  duration_ms: 4.532374
+  type: 'test'
+  ...
+# Subtest: Vertical slice: an enemy that reaches the base (not just one that dies) still completes the wave
+ok 136 - Vertical slice: an enemy that reaches the base (not just one that dies) still completes the wave
+  ---
+  duration_ms: 4.027039
+  type: 'test'
+  ...
+# Subtest: Vertical slice: a mix of dead and reached-base enemies still completes the wave exactly once (no double counting)
+ok 137 - Vertical slice: a mix of dead and reached-base enemies still completes the wave exactly once (no double counting)
+  ---
+  duration_ms: 3.32323
+  type: 'test'
+  ...
+# Subtest: EconomySystem: init rejects NaN and falls back to 0
+ok 138 - EconomySystem: init rejects NaN and falls back to 0
+  ---
+  duration_ms: 4.989494
+  type: 'test'
+  ...
+# Subtest: EconomySystem: add rejects Infinity and does not corrupt the balance
+ok 139 - EconomySystem: add rejects Infinity and does not corrupt the balance
+  ---
+  duration_ms: 7.546169
+  type: 'test'
+  ...
+# Subtest: EconomySystem: spend rejects a negative amount instead of adding currency
+ok 140 - EconomySystem: spend rejects a negative amount instead of adding currency
+  ---
+  duration_ms: 2.163393
+  type: 'test'
+  ...
+# Subtest: EconomySystem: getBalance self-heals if the balance field is externally corrupted to Infinity
+ok 141 - EconomySystem: getBalance self-heals if the balance field is externally corrupted to Infinity
+  ---
+  duration_ms: 1.707411
+  type: 'test'
+  ...
+# Subtest: EconomySystem: canAfford treats a NaN cost as free (0), not as unaffordable
+ok 142 - EconomySystem: canAfford treats a NaN cost as free (0), not as unaffordable
+  ---
+  duration_ms: 2.110955
+  type: 'test'
+  ...
+# Subtest: GameState: no longer exposes canAfford/spendCurrency/rewardEnemyKill (EconomySystem is sole runtime authority)
+ok 143 - GameState: no longer exposes canAfford/spendCurrency/rewardEnemyKill (EconomySystem is sole runtime authority)
+  ---
+  duration_ms: 2.024231
+  type: 'test'
+  ...
+# Subtest: GameState: player.currency initializes from CONFIG.ECONOMY.STARTING_CURRENCY
+ok 144 - GameState: player.currency initializes from CONFIG.ECONOMY.STARTING_CURRENCY
+  ---
+  duration_ms: 1.845244
+  type: 'test'
+  ...
+# Subtest: SaveManager.serialize: never writes Infinity/NaN currency even if runtime state is corrupted
+ok 145 - SaveManager.serialize: never writes Infinity/NaN currency even if runtime state is corrupted
+  ---
+  duration_ms: 1.304276
+  type: 'test'
+  ...
+# Subtest: SaveManager.validate: rejects a save file with Infinity currency (regression safety net)
+ok 146 - SaveManager.validate: rejects a save file with Infinity currency (regression safety net)
+  ---
+  duration_ms: 1.36098
+  type: 'test'
+  ...
+# Subtest: EconomyUI: displays the initial balance passed to init()
+ok 147 - EconomyUI: displays the initial balance passed to init()
+  ---
+  duration_ms: 3.127486
+  type: 'test'
+  ...
+# Subtest: EconomyUI: updates the displayed balance on CurrencyChanged
+ok 148 - EconomyUI: updates the displayed balance on CurrencyChanged
+  ---
+  duration_ms: 4.89339
+  type: 'test'
+  ...
+# Subtest: EconomyUI: ignores a non-finite balance from a malformed event instead of crashing or displaying it
+ok 149 - EconomyUI: ignores a non-finite balance from a malformed event instead of crashing or displaying it
+  ---
+  duration_ms: 2.136808
+  type: 'test'
+  ...
+# Subtest: EconomyUI: does not itself decide affordability (display-only boundary)
+ok 150 - EconomyUI: does not itself decide affordability (display-only boundary)
+  ---
+  duration_ms: 0.407631
+  type: 'test'
+  ...
+# Subtest: Phase 7: progression initializes with safe defaults and base unlocks
+ok 151 - Phase 7: progression initializes with safe defaults and base unlocks
+  ---
+  duration_ms: 17.505089
+  type: 'test'
+  ...
+# Subtest: Phase 7: XP levels up without invalid states and emits ProgressionChanged
+ok 152 - Phase 7: XP levels up without invalid states and emits ProgressionChanged
+  ---
+  duration_ms: 6.62615
+  type: 'test'
+  ...
+# Subtest: Phase 7: level unlocks maps and systems deterministically
+ok 153 - Phase 7: level unlocks maps and systems deterministically
+  ---
+  duration_ms: 7.478861
+  type: 'test'
+  ...
+# Subtest: Phase 7: wave XP follows centralized configuration
+ok 154 - Phase 7: wave XP follows centralized configuration
+  ---
+  duration_ms: 8.362323
+  type: 'test'
+  ...
+# Subtest: Phase 7: progression serializes and reloads persisted fields including defense unlocks
+ok 155 - Phase 7: progression serializes and reloads persisted fields including defense unlocks
+  ---
+  duration_ms: 4.024752
+  type: 'test'
+  ...
+# Subtest: Phase 7: malformed progression values are sanitized and cannot create invalid level state
+ok 156 - Phase 7: malformed progression values are sanitized and cannot create invalid level state
+  ---
+  duration_ms: 3.467382
+  type: 'test'
+  ...
+# Subtest: Phase 7: GameState is not a second progression authority
+ok 157 - Phase 7: GameState is not a second progression authority
+  ---
+  duration_ms: 2.840351
+  type: 'test'
+  ...
+# Subtest: Phase 7: full save payload retains progression after serialization validation
+ok 158 - Phase 7: full save payload retains progression after serialization validation
+  ---
+  duration_ms: 2.755753
+  type: 'test'
+  ...
+# Subtest: Phase 7: DefenseManager consults ProgressionSystem before entering placement mode
+ok 159 - Phase 7: DefenseManager consults ProgressionSystem before entering placement mode
+  ---
+  duration_ms: 1.816613
+  type: 'test'
+  ...
+# Subtest: Phase 7: SaveManager apply plus ProgressionSystem init restores the same unlock state after reload
+ok 160 - Phase 7: SaveManager apply plus ProgressionSystem init restores the same unlock state after reload
+  ---
+  duration_ms: 7.327854
+  type: 'test'
+  ...
+# Subtest: Phase 8: merge definitions are centralized and valid
+ok 161 - Phase 8: merge definitions are centralized and valid
+  ---
+  duration_ms: 17.583428
+  type: 'test'
+  ...
+# Subtest: Phase 8: merge rejects unknown and invalid recipes deterministically
+ok 162 - Phase 8: merge rejects unknown and invalid recipes deterministically
+  ---
+  duration_ms: 7.07198
+  type: 'test'
+  ...
+# Subtest: Phase 8: merge requires progression level
+ok 163 - Phase 8: merge requires progression level
+  ---
+  duration_ms: 7.748403
+  type: 'test'
+  ...
+# Subtest: Phase 8: merge requires all inputs and cost
+ok 164 - Phase 8: merge requires all inputs and cost
+  ---
+  duration_ms: 4.804093
+  type: 'test'
+  ...
+# Subtest: Phase 8: canMerge is a pure preflight and does not emit rejection side effects
+ok 165 - Phase 8: canMerge is a pure preflight and does not emit rejection side effects
+  ---
+  duration_ms: 4.781369
+  type: 'test'
+  ...
+# Subtest: Phase 8: successful merge consumes inputs, cost, creates result, and awards XP
+ok 166 - Phase 8: successful merge consumes inputs, cost, creates result, and awards XP
+  ---
+  duration_ms: 7.107217
+  type: 'test'
+  ...
+# Subtest: Phase 8: merge is deterministic and events expose stable payloads
+ok 167 - Phase 8: merge is deterministic and events expose stable payloads
+  ---
+  duration_ms: 4.901244
+  type: 'test'
+  ...
+# Subtest: Phase 8: failed merge does not mutate collection or currency
+ok 168 - Phase 8: failed merge does not mutate collection or currency
+  ---
+  duration_ms: 3.802506
+  type: 'test'
+  ...
+# Subtest: Phase 8: malformed collection state is sanitized
+ok 169 - Phase 8: malformed collection state is sanitized
+  ---
+  duration_ms: 11.317385
+  type: 'test'
+  ...
+# Subtest: Phase 8: grant rejects invalid quantities and emits acquisition events
+ok 170 - Phase 8: grant rejects invalid quantities and emits acquisition events
+  ---
+  duration_ms: 5.717785
+  type: 'test'
+  ...
+# Subtest: Phase 8: save validation accepts the merge collection slice and rejects malformed quantities
+ok 171 - Phase 8: save validation accepts the merge collection slice and rejects malformed quantities
+  ---
+  duration_ms: 28.961753
+  type: 'test'
+  ...
+# Subtest: Phase 8: save/apply round-trip restores collection ownership
+ok 172 - Phase 8: save/apply round-trip restores collection ownership
+  ---
+  duration_ms: 5.462698
+  type: 'test'
+  ...
+# Subtest: Phase 8: Game loads MergeSystem after save/progression and rewards merge material at wave completion
+ok 173 - Phase 8: Game loads MergeSystem after save/progression and rewards merge material at wave completion
+  ---
+  duration_ms: 1.117217
+  type: 'test'
+  ...
+# Subtest: Phase 8: index loads MergeSystem after EconomySystem
+ok 174 - Phase 8: index loads MergeSystem after EconomySystem
+  ---
+  duration_ms: 0.582364
+  type: 'test'
+  ...
+# Subtest: Phase 9: collection definitions are centralized, validated, and include rarity/upgrade/merge metadata
+ok 175 - Phase 9: collection definitions are centralized, validated, and include rarity/upgrade/merge metadata
+  ---
+  duration_ms: 27.079007
+  type: 'test'
+  ...
+# Subtest: Phase 9: ownership accepts only known, unlocked, positive safe quantities
+ok 176 - Phase 9: ownership accepts only known, unlocked, positive safe quantities
+  ---
+  duration_ms: 19.65339
+  type: 'test'
+  ...
+# Subtest: Phase 9: non-stackable items cannot exceed one owned copy
+ok 177 - Phase 9: non-stackable items cannot exceed one owned copy
+  ---
+  duration_ms: 6.489435
+  type: 'test'
+  ...
+# Subtest: Phase 9: level-driven unlocks update deterministically
+ok 178 - Phase 9: level-driven unlocks update deterministically
+  ---
+  duration_ms: 6.175553
+  type: 'test'
+  ...
+# Subtest: Phase 9: upgrade state is bounded and requires ownership
+ok 179 - Phase 9: upgrade state is bounded and requires ownership
+  ---
+  duration_ms: 10.364656
+  type: 'test'
+  ...
+# Subtest: Phase 9: merge eligibility is data-driven through CollectionSystem
+ok 180 - Phase 9: merge eligibility is data-driven through CollectionSystem
+  ---
+  duration_ms: 6.037024
+  type: 'test'
+  ...
+# Subtest: Phase 9: removal is atomic on insufficient ownership
+ok 181 - Phase 9: removal is atomic on insufficient ownership
+  ---
+  duration_ms: 11.724374
+  type: 'test'
+  ...
+# Subtest: Phase 9: malformed collection state is sanitized without unknown content
+ok 182 - Phase 9: malformed collection state is sanitized without unknown content
+  ---
+  duration_ms: 11.469948
+  type: 'test'
+  ...
+# Subtest: Phase 9: collection persistence round-trips ownership, unlocks and upgrade state
+ok 183 - Phase 9: collection persistence round-trips ownership, unlocks and upgrade state
+  ---
+  duration_ms: 12.662031
+  type: 'test'
+  ...
+# Subtest: Phase 9: saved malformed upgrades/ids are rejected by SaveManager validation
+ok 184 - Phase 9: saved malformed upgrades/ids are rejected by SaveManager validation
+  ---
+  duration_ms: 9.6921
+  type: 'test'
+  ...
+# Subtest: Phase 9: MergeSystem consumes and creates through CollectionSystem owner
+ok 185 - Phase 9: MergeSystem consumes and creates through CollectionSystem owner
+  ---
+  duration_ms: 7.939636
+  type: 'test'
+  ...
+1..185
+# tests 185
+# suites 0
+# pass 185
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6640.043584
